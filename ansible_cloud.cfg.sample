@@ -1,0 +1,10 @@
+[default]
+provider = vultr
+
+[digital_ocean]
+type = digital_ocean
+api_key = XXX
+
+[vultr]
+type = vultr
+api_key = XXX
