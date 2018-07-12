@@ -1,0 +1,40 @@
+---
+- name: Cloud provider independent playbook
+  # hosts: vultr
+  hosts: openstack
+  tasks:
+    - name: Ensure a specific SSH key is present on the cloud provider
+      include_role:
+        name: cloud-sshkey
+      vars:
+        cloud_sshkey_name: '{{ sshkey_name }}'
+        cloud_sshkey_content: '{{ sshkey_content }}'
+
+    - name: Ensure a specific Security Group is present on the cloud provider
+      include_role:
+        name: cloud-securitygroup
+      vars:
+        cloud_securitygroup_name: '{{ securitygroup_name }}'
+
+    - name: Ensure the proper firewall rules are present in the Security Group
+      include_role:
+        name: cloud-firewallrule
+      vars:
+        cloud_firewallrule_group_name: '{{ item.group_name }}'
+        cloud_firewallrule_protocol: '{{ item.protocol }}'
+        cloud_firewallrule_start_port: '{{ item.start_port }}'
+        cloud_firewallrule_end_port: '{{ item.end_port }}'
+        cloud_firewallrule_remote_cidr: '{{ item.remote_cidr }}'
+      with_items: '{{ firewallrules }}'
+
+
+    - name: Create the server
+      include_role:
+        name: cloud-server
+      vars:
+        cloud_server_name: '{{ server_name }}'
+        cloud_server_image: '{{ server_image }}'
+        cloud_server_flavor: '{{ server_flavor }}'
+        cloud_server_region: '{{ server_region }}'
+        cloud_server_sshkey: '{{ sshkey_name }}'
+        cloud_server_security_group: '{{ securitygroup_name }}'

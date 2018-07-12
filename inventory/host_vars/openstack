@@ -1,0 +1,5 @@
+ansible_cloud_provider: openstack
+
+server_image: CentOS-7-x86_64-GenericCloud-1804_02
+server_flavor: m1.medium
+server_region: nova
