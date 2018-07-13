@@ -1,7 +1,7 @@
 ---
 - name: Cloud provider independent playbook
-  # hosts: vultr
-  hosts: openstack
+  hosts: vultr
+  #hosts: openstack
   tasks:
     - name: Ensure a specific SSH key is present on the cloud provider
       include_role:

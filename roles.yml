@@ -1,11 +1,11 @@
-- src: https://softwarefactory-project.io/r/ansible/ansible-role-cloud-firewallrule
+- src: https://github.com/redhat-cip/ansible-role-cloud-firewallrule
   name: cloud-firewallrule
 
-- src: https://softwarefactory-project.io/r/ansible/ansible-role-cloud-securitygroup
+- src: https://github.com/redhat-cip/ansible-role-cloud-securitygroup
   name: cloud-securitygroup
 
-- src: https://softwarefactory-project.io/r/ansible/ansible-role-cloud-server
+- src: https://github.com/redhat-cip/ansible-role-cloud-server
   name: cloud-server
 
-- src: https://softwarefactory-project.io/r/ansible/ansible-role-cloud-sshkey
+- src: https://github.com/redhat-cip/ansible-role-cloud-sshkey
   name: cloud-sshkey
