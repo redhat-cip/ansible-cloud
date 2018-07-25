@@ -1,20 +1,21 @@
 ---
 - name: Cloud provider independent playbook
-  hosts: vultr
-  #hosts: openstack
+  hosts: '{{ lookup("env", "ANSIBLE_CLOUD_PROVIDER") }}'
   tasks:
     - name: Ensure a specific SSH key is present on the cloud provider
       include_role:
         name: cloud-sshkey
       vars:
-        cloud_sshkey_name: '{{ sshkey_name }}'
-        cloud_sshkey_content: '{{ sshkey_content }}'
+        cloud_sshkey_name: '{{ item.name }}'
+        cloud_sshkey_content: '{{ item.content }}'
+      with_items: '{{ sshkeys|default({}) }}'
 
     - name: Ensure a specific Security Group is present on the cloud provider
       include_role:
         name: cloud-securitygroup
       vars:
-        cloud_securitygroup_name: '{{ securitygroup_name }}'
+        cloud_securitygroup_name: '{{ item.name }}'
+      with_items: '{{ securitygroups|default({}) }}'
 
     - name: Ensure the proper firewall rules are present in the Security Group
       include_role:
@@ -25,16 +26,26 @@
         cloud_firewallrule_start_port: '{{ item.start_port }}'
         cloud_firewallrule_end_port: '{{ item.end_port }}'
         cloud_firewallrule_remote_cidr: '{{ item.remote_cidr }}'
-      with_items: '{{ firewallrules }}'
+      with_items: '{{ firewallrules|default({}) }}'
 
+    - name: Ensure the proper volumes are created
+      include_role:
+        name: cloud-volume
+      vars:
+        cloud_volume_name: '{{ item.name }}'
+        cloud_volume_size: '{{ item.size }}'
+        cloud_volume_region: '{{ item.region }}'
+      with_items: '{{ volumes|default({}) }}'
 
     - name: Create the server
       include_role:
         name: cloud-server
       vars:
-        cloud_server_name: '{{ server_name }}'
-        cloud_server_image: '{{ server_image }}'
-        cloud_server_flavor: '{{ server_flavor }}'
-        cloud_server_region: '{{ server_region }}'
-        cloud_server_sshkey: '{{ sshkey_name }}'
-        cloud_server_security_group: '{{ securitygroup_name }}'
+        cloud_server_name: '{{ item.name }}'
+        cloud_server_image: '{{ item.image }}'
+        cloud_server_flavor: '{{ item.flavor }}'
+        cloud_server_region: '{{ item.region }}'
+        cloud_server_sshkey: '{{ item.sshkey }}'
+        cloud_server_security_group: '{{ item.security_group }}'
+        cloud_server_volumes: '{{ item.volumes|default([]) }}'
+      with_items: '{{ servers|default({}) }}'

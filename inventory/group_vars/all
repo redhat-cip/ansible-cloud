@@ -1,12 +1,50 @@
 ansible_host: localhost
 ansible_connection: local
 
-sshkey_name: ansiblecloud-testkey
-sshkey_content: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+ZFQv3MyjtL1BMpSA0o0gIkzLVVC711rthT29hBNeORdNowQ7FSvVWUdAbTq00U7Xzak1ANIYLJyn+0r7olsdG4XEiUR0dqgC99kbT/QhY5mLe5lpl7JUjW9ctn00hNmt+TswpatCKWPNwdeAJT2ERynZaqPobENgvIq7jfOFWQIVew7qFeZygxsPVn36EUr2Cdq7Nb7U0XFXh3x1p0v0+MbL4tiJwPlMAGvFTKIMt+EaA+AsRIxiOo9CMk5ZuOl9pT8h5vNuEOcvS0qx4v44EAD2VOsCVCcrPNMcpuSzZP8dRTGU9wRREAWXngD0Zq9YJMH38VTxHiskoBw1NnPz spredzy@murcia.yanisguenane.fr'
 
-securitygroup_name: ansiblecloud-testsecuritygroup
+# SSH Keys
+#
+sshkeys:
+  - { 'name': ansiblecloud-testkey, 'content': 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+ZFQv3MyjtL1BMpSA0o0gIkzLVVC711rthT29hBNeORdNowQ7FSvVWUdAbTq00U7Xzak1ANIYLJyn+0r7olsdG4XEiUR0dqgC99kbT/QhY5mLe5lpl7JUjW9ctn00hNmt+TswpatCKWPNwdeAJT2ERynZaqPobENgvIq7jfOFWQIVew7qFeZygxsPVn36EUr2Cdq7Nb7U0XFXh3x1p0v0+MbL4tiJwPlMAGvFTKIMt+EaA+AsRIxiOo9CMk5ZuOl9pT8h5vNuEOcvS0qx4v44EAD2VOsCVCcrPNMcpuSzZP8dRTGU9wRREAWXngD0Zq9YJMH38VTxHiskoBw1NnPz spredzy@murcia.yanisguenane.fr' }
 
+
+# Security Groups
+#
+securitygroups:
+  - { 'name': ansiblecloud-web }
+  - { 'name': ansiblecloud-db }
+
+
+# Firewall Rules
+#
 firewallrules:
-  - {'group_name': 'ansiblecloud-testsecuritygroup', 'protocol': tcp, 'start_port': 80, 'end_port': 81, 'remote_cidr': '0.0.0.0/0'}
+  - { 'group_name': 'ansiblecloud-web', 'protocol': tcp, 'start_port': 22, 'end_port': 23, 'remote_cidr': '0.0.0.0/0' }
+  - { 'group_name': 'ansiblecloud-web', 'protocol': tcp, 'start_port': 80, 'end_port': 81, 'remote_cidr': '0.0.0.0/0' }
+  - { 'group_name': 'ansiblecloud-db', 'protocol': tcp, 'start_port': 22, 'end_port': 23, 'remote_cidr': '0.0.0.0/0' }
+  - { 'group_name': 'ansiblecloud-db', 'protocol': tcp, 'start_port': 3306, 'end_port': 3307, 'remote_cidr': '0.0.0.0/0' }
 
-server_name: ansible-testvm
+
+# Volumes
+#
+volumes:
+  - {'name': web-volume, 'size': 10, 'region': '{{ region }}' }
+  - {'name': db-volume, 'size': 10, 'region': '{{ region }}' }
+
+
+# Servers
+#
+servers:
+  - { 'name': web,
+      'image': '{{ server_image }}',
+      'flavor': '{{ server_flavor }}',
+      'region': '{{ server_region }}',
+      'security_group': ansiblecloud-web,
+      'sshkey': ansiblecloud-testkey
+    }
+  - { 'name': db,
+      'image': '{{ server_image }}',
+      'flavor': '{{ server_flavor }}',
+      'region': '{{ server_region }}',
+      'security_group': ansiblecloud-db,
+      'sshkey': ansiblecloud-testkey
+    }

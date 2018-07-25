@@ -14,6 +14,7 @@ Ansible provides many provider-specific modules to accomplish those tasks. The i
 | [cloud-securitygroup](https://github.com/redhat-cip/ansible-role-cloud-securitygroup) | OK                             | -                                             | OK                                      | -                                |
 | [cloud-firewallrule](https://github.com/redhat-cip/ansible-role-cloud-firewallrule)   | OK                             | -                                             | OK                                      | -                                |
 | [cloud-server](https://github.com/redhat-cip/ansible-role-cloud-server)               | OK                             | -                                             | OK                                      | -                                |
+| [cloud-volume](https://github.com/redhat-cip/ansible-role-cloud-volume)               | OK                             | OK                                             | OK                                      | -                                |
 
 ## Pre-requisites per provider
 
