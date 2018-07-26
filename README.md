@@ -7,7 +7,7 @@ Most often than not, we generally do the same actions on cloud platforms, no mat
 Ansible provides many provider-specific modules to accomplish those tasks. The idea here is to provide generic roles so one can write a playbook once and run it on every supported cloud providers.
 
 - [The idea behind ansible-cloud](#the-idea-behind-ansible-cloud)
-- [How does it work](#how-does-it-work?)
+- [How does it work](#how-does-it-work)
 - [Matrix of provider supported resources](#matrix-of-provider-supported-resources)
 - [Provider specific requirements](#provider-specific-requirements)
   * [Amazon](#amazon)
