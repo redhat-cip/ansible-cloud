@@ -99,9 +99,9 @@ making hybrid cloud a reality.
 |                                                                                       | [Vultr](https://www.vultr.com) | [Digital Ocean](https://www.digitalocean.com) | [OpenStack](https://www.openstack.org/) | [Amazon](https://aws.amazon.com) |
 | ------------------------------------------------------------------------------------- | ------------------------------ | --------------------------------------------- | --------------------------------------- | -------------------------------- |
 | [cloud-sshkey](https://github.com/redhat-cip/ansible-role-cloud-sshkey)               | OK                             | OK                                            | OK                                      | OK                               |
-| [cloud-securitygroup](https://github.com/redhat-cip/ansible-role-cloud-securitygroup) | OK                             | -                                             | OK                                      | -                                |
+| [cloud-securitygroup](https://github.com/redhat-cip/ansible-role-cloud-securitygroup) | OK                             | -                                             | OK                                      | OK                               |
 | [cloud-firewallrule](https://github.com/redhat-cip/ansible-role-cloud-firewallrule)   | OK                             | -                                             | OK                                      | -                                |
-| [cloud-server](https://github.com/redhat-cip/ansible-role-cloud-server)               | OK                             | -                                             | OK                                      | -                                |
+| [cloud-server](https://github.com/redhat-cip/ansible-role-cloud-server)               | OK                             | -                                             | OK                                      | OK                               |
 | [cloud-volume](https://github.com/redhat-cip/ansible-role-cloud-volume)               | -                              | OK                                             | OK                                      | -                                |
 
 ## Provider specific requirements

@@ -1,0 +1,7 @@
+ansible_cloud_provider: amazon
+
+region: eu-west-1
+
+server_image: ami-6e28b517
+server_flavor: t2.micro
+server_region: '{{ region }}'
