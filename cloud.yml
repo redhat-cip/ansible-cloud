@@ -8,7 +8,7 @@
       vars:
         cloud_sshkey_name: '{{ item.name }}'
         cloud_sshkey_content: '{{ item.content }}'
-        cloud_sshkey_region: '{{ item.content|default(None) }}'
+        cloud_sshkey_region: '{{ item.region|default(None) }}'
       with_items: '{{ sshkeys|default({}) }}'
 
     - name: Ensure the proper networks are created
@@ -25,7 +25,9 @@
         name: cloud-securitygroup
       vars:
         cloud_securitygroup_name: '{{ item.name }}'
-        cloud_securitygroup_region: '{{ item.name|default(None) }}'
+        cloud_securitygroup_region: '{{ item.region|default(None) }}'
+        cloud_securitygroup_rules: '{{ item.rules|default([]) }}'
+        cloud_securitygroup_network: '{{ item.network|default(None) }}'
       with_items: '{{ securitygroups|default({}) }}'
 
     - name: Ensure the proper firewall rules are present in the Security Group
@@ -57,6 +59,6 @@
         cloud_server_flavor: '{{ item.flavor }}'
         cloud_server_region: '{{ item.region }}'
         cloud_server_sshkey: '{{ item.sshkey }}'
-        cloud_server_security_group: '{{ item.security_group }}'
+        cloud_server_security_groups: '{{ item.security_groups }}'
         cloud_server_volumes: '{{ item.volumes|default([]) }}'
       with_items: '{{ servers|default({}) }}'
