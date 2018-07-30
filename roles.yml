@@ -1,6 +1,9 @@
 - src: https://github.com/redhat-cip/ansible-role-cloud-firewallrule
   name: cloud-firewallrule
 
+- src: https://github.com/redhat-cip/ansible-role-cloud-network
+  name: cloud-network
+
 - src: https://github.com/redhat-cip/ansible-role-cloud-securitygroup
   name: cloud-securitygroup
 

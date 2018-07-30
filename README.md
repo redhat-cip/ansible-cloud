@@ -45,6 +45,9 @@ firewallrules:
   - { 'group_name': 'ansiblecloud-web', 'protocol': tcp, 'start_port': 22, 'end_port': 23, 'remote_cidr': '0.0.0.0/0' }
   - { 'group_name': 'ansiblecloud-web', 'protocol': tcp, 'start_port': 80, 'end_port': 81, 'remote_cidr': '0.0.0.0/0' }
 
+networks:
+  - { 'name': 'ansiblecloud-network', 'cidr': '192.168.42.0/24', 'region': '{{ region }}' }
+
 servers:
   - { 'name': web,
       'image': '{{ server_image }}',
@@ -98,10 +101,11 @@ making hybrid cloud a reality.
 
 |                                                                                       | [Vultr](https://www.vultr.com) | [Digital Ocean](https://www.digitalocean.com) | [OpenStack](https://www.openstack.org/) | [Amazon](https://aws.amazon.com) |
 | ------------------------------------------------------------------------------------- | ------------------------------ | --------------------------------------------- | --------------------------------------- | -------------------------------- |
-| [cloud-sshkey](https://github.com/redhat-cip/ansible-role-cloud-sshkey)               | OK                             | OK                                            | OK                                      | OK                               |
-| [cloud-securitygroup](https://github.com/redhat-cip/ansible-role-cloud-securitygroup) | OK                             | -                                             | OK                                      | OK                               |
 | [cloud-firewallrule](https://github.com/redhat-cip/ansible-role-cloud-firewallrule)   | OK                             | -                                             | OK                                      | -                                |
+| [cloud-network](https://github.com/redhat-cip/ansible-role-cloud-network)             | -                              | -                                             | OK                                      | OK                               |
+| [cloud-securitygroup](https://github.com/redhat-cip/ansible-role-cloud-securitygroup) | OK                             | -                                             | OK                                      | OK                               |
 | [cloud-server](https://github.com/redhat-cip/ansible-role-cloud-server)               | OK                             | -                                             | OK                                      | OK                               |
+| [cloud-sshkey](https://github.com/redhat-cip/ansible-role-cloud-sshkey)               | OK                             | OK                                            | OK                                      | OK                               |
 | [cloud-volume](https://github.com/redhat-cip/ansible-role-cloud-volume)               | -                              | OK                                             | OK                                      | -                                |
 
 ## Provider specific requirements

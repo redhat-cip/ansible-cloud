@@ -11,6 +11,15 @@
         cloud_sshkey_region: '{{ item.content|default(None) }}'
       with_items: '{{ sshkeys|default({}) }}'
 
+    - name: Ensure the proper networks are created
+      include_role:
+        name: cloud-network
+      vars:
+        cloud_network_name: '{{ item.name }}'
+        cloud_network_cidr: '{{ item.cidr }}'
+        cloud_network_region: '{{ item.region|default(None) }}'
+      with_items: '{{ networks|default({}) }}'
+
     - name: Ensure a specific Security Group is present on the cloud provider
       include_role:
         name: cloud-securitygroup

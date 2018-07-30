@@ -31,6 +31,12 @@ volumes:
   - {'name': db-volume, 'size': 10, 'region': '{{ region }}' }
 
 
+# Networks
+#
+networks:
+  - {'name': closed-network, 'cidr': '192.168.42.0/24', 'region': '{{ region }}'}
+
+
 # Servers
 #
 servers:
