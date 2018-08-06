@@ -31,31 +31,68 @@ ansible-cloud provides a generic `cloud.yml` playbook that should remain untouch
 This is a sample of a variable file:
 
 ```
-ansible_host: localhost
-ansible_connection: local
-
 sshkeys:
-  - { 'name': ansiblecloud-key, 'content': 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+ZFQv3MyjtL1BMpSA0o0gIkzLVVCewtrqwrewqrewqrqNowQ7FSvVWUdAbTq00U7Xzak1ANIYLJyn+0r7olsdG4XEiUR0dqgC99kbT/QhY5mLe5lpl7JUjW9ctn00hNmt+TswpatCKWPNwdeAJT2ERynZaqPobENgvIq7jfOFWQIVew7qFeZygxsPVn36EUr2Cdq7Nb7U0XFXh3x1p0v0+MbL4tiJwPlMAGvFTKIMt+EaA+AsRIxiOo9CMk5ZuOl9pT8h5vNuEOcvS0qx4v44EAD2VOsCVCcrPNMcpuSzZP8dRTGU9wRREAWXngD0Zq9YJMH38VTxHiskoBw1NnPz me@home' }
-
-securitygroups:
-  - { 'name': ansiblecloud-web }
-
-
-firewallrules:
-  - { 'group_name': 'ansiblecloud-web', 'protocol': tcp, 'start_port': 22, 'end_port': 23, 'remote_cidr': '0.0.0.0/0' }
-  - { 'group_name': 'ansiblecloud-web', 'protocol': tcp, 'start_port': 80, 'end_port': 81, 'remote_cidr': '0.0.0.0/0' }
+  - name: wordpress-user
+    content: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+ZFQv3MyjtL1BMpSA0o0gIkzLVVC711rthT29hBNeORdNowQ7FSvVWUdAbTq00U7Xzak1ANIYLJyn+0r7olsdG4XEiUR0dqgC99kbT/QhY5mLe5lpl7JUjW9ctn00hNmt+TswpatCKWPNwdeAJT2ERynZaqPobENgvIq7jfOFWQIVew7qFeZygxsPVn36EUr2Cdq7Nb7U0XFXh3x1p0v0+MbL4tiJwPlMAGvFTKIMt+EaA+AsRIxiOo9CMk5ZuOl9pT8h5vNuEOcvS0qx4v44EAD2VOsCVCcrPNMcpuSzZP8dRTGU9wRREAWXngD0Zq9YJMH38VTxHiskoBw1NnPz spredzy@murcia.yanisguenane.fr'
+    region: '{{ region }}'
 
 networks:
-  - { 'name': 'ansiblecloud-network', 'cidr': '192.168.42.0/24', 'region': '{{ region }}' }
+  - name: wordpress
+    cidr: 192.168.44.0/24
+    region: '{{ region }}'
+
+securitygroups:
+  - name: http
+    region: '{{ region }}'
+    network: wordpress
+    rules:
+      - cidr_ip: 0.0.0.0/0
+        proto: tcp
+        from_port: 80
+        to_port: 81
+      - cidr_ip: 0.0.0.0/0
+        proto: tcp
+        from_port: 443
+        to_port: 444
+
+  - name: prod
+    region: '{{ region }}'
+    network: wordpress
+    rules:
+      - cidr_ip: 0.0.0.0/0
+        proto: tcp
+        from_port: 22
+        to_port: 23
+
+  - name: db
+    region: '{{ region }}'
+    network: wordpress
+    rules:
+      - cidr_ip: 0.0.0.0/0
+        proto: tcp
+        from_port: 5432
+        to_port: 5432
 
 servers:
-  - { 'name': web,
-      'image': '{{ server_image }}',
-      'flavor': '{{ server_flavor }}',
-      'region': '{{ server_region }}',
-      'security_group': ansiblecloud-web,
-      'sshkey': ansiblecloud-key
-    }
+  - name: wordpress-api
+    sshkey: wordpress-user
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: wordpress
+    security_groups:
+      - http
+      - prod
+
+  - name: wordpress-db
+    sshkey: wordpress-user
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: wordpress
+    security_groups:
+      - db
+      - prod
 ```
 
 The above file **describes** what my cloud infrastructure should look like.
@@ -63,7 +100,7 @@ The above file **describes** what my cloud infrastructure should look like.
 To deploy that on "the cloud", one would run the following command:
 
 ```
-#> ANSIBLE_CLOUD_PROVIDER=openstack ansible-playbook -i inventory/hosts cloud.yml
+#> ANSIBLE_CLOUD_PROVIDER=openstack ansible-playbook -i inventory/hosts cloud.yml -e @topology/mytopology.yml
 ```
 
 Here `openstack` has been specified, but one could replace it by `vultr`, `amazon` or any other supported cloud platform.
@@ -91,7 +128,7 @@ making hybrid cloud a reality.
 
 ```
 ## Deploying the infrastructure
-#> ANSIBLE_CLOUD_PROVIDER=provider ansible-playbook -i inventory/hosts cloud.yml
+#> ANSIBLE_CLOUD_PROVIDER=provider ansible-playbook -i inventory/hosts cloud.yml -e @topology/mytopology.yml
 
 ## Deploying the application stack
 #> ansible-playbook -i inventory/provider.py application.yml

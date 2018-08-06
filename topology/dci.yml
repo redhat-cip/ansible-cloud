@@ -1,0 +1,149 @@
+---
+sshkeys:
+  - name: dci-spredzy
+    content: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+ZFQv3MyjtL1BMpSA0o0gIkzLVVC711rthT29hBNeORdNowQ7FSvVWUdAbTq00U7Xzak1ANIYLJyn+0r7olsdG4XEiUR0dqgC99kbT/QhY5mLe5lpl7JUjW9ctn00hNmt+TswpatCKWPNwdeAJT2ERynZaqPobENgvIq7jfOFWQIVew7qFeZygxsPVn36EUr2Cdq7Nb7U0XFXh3x1p0v0+MbL4tiJwPlMAGvFTKIMt+EaA+AsRIxiOo9CMk5ZuOl9pT8h5vNuEOcvS0qx4v44EAD2VOsCVCcrPNMcpuSzZP8dRTGU9wRREAWXngD0Zq9YJMH38VTxHiskoBw1NnPz spredzy@murcia.yanisguenane.fr'
+    region: '{{ region }}'
+
+networks:
+  - name: dci
+    cidr: 192.168.43.0/24
+    region: '{{ region }}'
+
+securitygroups:
+  - name: dci-http
+    region: '{{ region }}'
+    network: dci
+    rules:
+      - cidr_ip: 0.0.0.0/0
+        proto: tcp
+        from_port: 80
+        to_port: 81
+      - cidr_ip: 0.0.0.0/0
+        proto: tcp
+        from_port: 443
+        to_port: 444
+
+  - name: dci-prod
+    region: '{{ region }}'
+    network: dci
+    rules:
+      - cidr_ip: 0.0.0.0/0
+        proto: tcp
+        from_port: 22
+        to_port: 23
+
+  - name: dci-db
+    region: '{{ region }}'
+    network: dci
+    rules:
+      - cidr_ip: 0.0.0.0/0
+        proto: tcp
+        from_port: 5432
+        to_port: 5432
+
+  - name: dci-swift
+    region: '{{ region }}'
+    network: dci
+
+  - name: dci-worker
+    region: '{{ region }}'
+    network: dci
+
+servers:
+  - name: dci-api
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-http
+      - dci-prod
+
+  - name: dci-db
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-db
+      - dci-prod
+
+  - name: dci-doc
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-http
+      - dci-prod
+
+  - name: dci-feeder
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-http
+      - dci-prod
+
+  - name: dci-jumpbox
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-prod
+
+  - name: dci-package
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-http
+      - dci-prod
+
+  - name: dci-repo
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-http
+      - dci-prod
+
+  - name: dci-swift
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-prod
+
+  - name: dci-ui
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-http
+      - dci-prod
+
+  - name: dci-worker
+    sshkey: dci-spredzy
+    image: '{{ server_image }}'
+    region: '{{ server_region }}'
+    flavor: '{{ server_flavor }}'
+    network: dci
+    security_groups:
+      - dci-worker
+      - dci-prod
